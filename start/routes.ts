@@ -8,7 +8,6 @@
 */
 
 import router from '@adonisjs/core/services/router'
-// router.on('/').renderInertia('home', { version: 6 })
 import { middleware } from '#start/kernel'
 import HomeController from '#controllers/home_controller'
 import RegisterController from '#controllers/auth/register_controller'
@@ -20,8 +19,8 @@ import UserController from '#controllers/admin/user_controller'
 import ProductController from '#controllers/product_controller'
 import CategoryController from '#controllers/category_controller'
 
+// router.on('/').renderInertia('home', { version: 6 })
 router.get('/', [HomeController, 'index'])
-// router.get('/', [HomeController, 'index'])
 
 router.get('/profile', [ProfileController, 'index']).use(middleware.auth())
 router.put('/update-profile', [ProfileController, 'update']).use(middleware.auth())
@@ -35,27 +34,67 @@ router.post('/login', [LoginController, 'store'])
 
 router.get('/logout', [LogoutController, 'handle'])
 
-router.get('/', [DashboardController, 'index']).use(middleware.admin()).prefix('/admin').as('admin')
 
-router
-  .get('/users', [UserController, 'index'])
-  .use(middleware.admin())
-  .prefix('/admin')
-  .as('admin.users')
-router.put('/users/update-role', [UserController, 'updateRole']).prefix('/admin')
-
-router.get('/product', [ProductController,'index']).use(middleware.admin()).prefix('/admin')
-router.get('/product/create', [ProductController,'showCreate']).use(middleware.admin()).prefix('/admin')
-router.get('/product/update/:id', [ProductController,'showUpdate']).use(middleware.admin()).prefix('/admin')
-router.post('/product/create', [ProductController,'createProduct']).use(middleware.admin()).prefix('/admin')
-router.put('/product/update', [ProductController,'updateProduct']).use(middleware.admin()).prefix('/admin')
-router.delete('/products/delete', [ProductController,'deleteProduct']).use(middleware.admin()).prefix('/admin')
-
-router.get('/categories', [CategoryController,'index']).use(middleware.admin()).prefix('/admin')
-router.post('/categories/create', [CategoryController,'create']).use(middleware.admin()).prefix('/admin')
-router.put('/categories/update', [CategoryController,'update']).use(middleware.admin()).prefix('/admin')
-router.delete('/categories/delete', [CategoryController,'delete']).use(middleware.admin()).prefix('/admin')
-router.get('/categories/search', [CategoryController,'searchCategory']).use(middleware.admin()).prefix('/admin')
+// FRONTEND routers
 
 router.get('/product', [ProductController, 'showProducts'])
 router.get('/product/:id', [ProductController, 'showProductDetail'])
+
+
+// ADMIN routers
+
+router.group(() => {
+  router
+    .get('/', [DashboardController, 'index'])
+    .as('admin')
+
+  router
+    .get('/users', [UserController, 'index'])
+    .as('admin.users')
+
+  router.put('/users/update-role', [UserController, 'updateRole'])
+
+  router
+    .get('/product', [ProductController, 'index'])
+    .as('admin.products')
+
+  router
+    .get('/product/create', [ProductController, 'showCreate'])
+    .as('admin.products.create')
+
+  router
+    .get('/product/update/:id', [ProductController, 'showUpdate'])
+    .as('admin.products.update')
+
+  router
+    .post('/product/create', [ProductController, 'createProduct'])
+
+  router
+    .put('/product/update', [ProductController, 'updateProduct'])
+
+  router
+    .delete('/products/delete', [ProductController, 'deleteProduct'])
+    .as('admin.products.delete')
+
+  router
+    .get('/categories', [CategoryController, 'index'])
+    .as('admin.categories')
+
+  router
+    .post('/categories/create', [CategoryController, 'create'])
+
+  router
+    .put('/categories/update', [CategoryController, 'update'])
+
+  router
+    .delete('/categories/delete', [CategoryController, 'delete'])
+    .as('admin.categories.delete')
+
+  router
+    .get('/categories/search', [CategoryController, 'searchCategory'])
+    .as('admin.categories.search')
+
+})
+.use(middleware.admin())
+.prefix('/admin')
+
