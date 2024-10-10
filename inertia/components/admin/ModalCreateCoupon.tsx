@@ -2,10 +2,14 @@ import { useForm } from '@inertiajs/react'
 import { LoadingButtonComponent } from '../LoadingButton'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
+
+
 type Props = {
   close: () => void
 }
+
 function ModalCreateCoupon({ close }: Props) {
+
   const { processing, errors, data, setData, recentlySuccessful, post } = useForm({
     code: '',
     name: '',
@@ -17,16 +21,19 @@ function ModalCreateCoupon({ close }: Props) {
     maxNumOfTickets: 0,
     numOfWinners: 0,
   })
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     post('/admin/coupons/create')
   }
+
   useEffect(() => {
     if (recentlySuccessful) {
       toast.success('Coupon created successfully')
       close()
     }
   }, [recentlySuccessful])
+
   return (
     <div className="bg-modal-bg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
       <div className="relative p-4 w-full max-w-md max-h-full">
@@ -122,7 +129,7 @@ function ModalCreateCoupon({ close }: Props) {
                 )}
               </div>
 
-              <div className="col-span-2">
+              <div>
                 <label htmlFor="availFrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Available From
                 </label>
@@ -137,7 +144,7 @@ function ModalCreateCoupon({ close }: Props) {
                 {errors.availFrom && <p className="text-red-500 text-sm mt-1">{errors.availFrom}</p>}
               </div>
 
-              <div className="col-span-2">
+              <div>
                 <label htmlFor="availTo" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Available To
                 </label>
