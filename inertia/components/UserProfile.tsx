@@ -2,6 +2,7 @@ import { router, useForm, usePage } from '@inertiajs/react'
 import { LoadingButtonComponent } from './LoadingButton'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
+
 type User = {
   id: number
   email: string
@@ -10,7 +11,8 @@ type User = {
   created_at: string
   updated_at: string
 }
-function TabProfile() {
+
+function UserProfile() {
   const { user, success } = usePage<{ user: User; success: { message?: string } }>().props
   const { data, setData, errors, processing, put } = useForm({
     email: user.email,
@@ -29,6 +31,7 @@ function TabProfile() {
   const handleDelete = () => {
     router.delete('/delete-profile')
   }
+
   return (
     <>
       <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
@@ -102,4 +105,4 @@ function TabProfile() {
   )
 }
 
-export default TabProfile
+export default UserProfile

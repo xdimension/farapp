@@ -37,7 +37,7 @@ function HeaderComponent() {
       <NavbarToggle />
       <NavbarCollapse>
         <Link href="/">Home</Link>
-        <Link href="/product">Products</Link>
+        <Link href="/products">Products</Link>
         <Link href="#">About</Link>
       </NavbarCollapse>
     </MegaMenu>

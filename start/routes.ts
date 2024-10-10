@@ -16,15 +16,10 @@ import LogoutController from '#controllers/auth/logout_controller'
 import ProfileController from '#controllers/profile_controller'
 import DashboardController from '#controllers/admin/dashboard_controller'
 import UserController from '#controllers/admin/user_controller'
-import ProductController from '#controllers/product_controller'
 import CategoryController from '#controllers/category_controller'
 
 // router.on('/').renderInertia('home', { version: 6 })
 router.get('/', [HomeController, 'index'])
-
-router.get('/profile', [ProfileController, 'index']).use(middleware.auth())
-router.put('/update-profile', [ProfileController, 'update']).use(middleware.auth())
-router.delete('/delete-profile', [ProfileController, 'delete']).use(middleware.auth())
 
 router.get('/register', [RegisterController, 'show'])
 router.post('/register', [RegisterController, 'store'])
@@ -35,10 +30,15 @@ router.post('/login', [LoginController, 'store'])
 router.get('/logout', [LogoutController, 'handle'])
 
 
-// FRONTEND routers
+// USER DASHBOARD routers
 
-router.get('/product', [ProductController, 'showProducts'])
-router.get('/product/:id', [ProductController, 'showProductDetail'])
+router.group(() => {
+  router.get('/profile', [ProfileController, 'index'])
+  router.put('/update-profile', [ProfileController, 'update'])
+  router.delete('/delete-profile', [ProfileController, 'delete'])
+
+})
+.use(middleware.auth())
 
 
 // ADMIN routers
@@ -54,28 +54,26 @@ router.group(() => {
 
   router.put('/users/update-role', [UserController, 'updateRole'])
 
-  router
-    .get('/product', [ProductController, 'index'])
-    .as('admin.products')
+  // router
+  //   .get('/coupons', [CouponController, 'index'])
+  //   .as('admin.coupons')
 
-  router
-    .get('/product/create', [ProductController, 'showCreate'])
-    .as('admin.products.create')
+  // router
+  //   .post('/coupons/create', [CouponController, 'create'])
 
-  router
-    .get('/product/update/:id', [ProductController, 'showUpdate'])
-    .as('admin.products.update')
+  // router
+  //   .put('/coupons/update', [CouponController, 'update'])
 
-  router
-    .post('/product/create', [ProductController, 'createProduct'])
+  // router
+  //   .delete('/coupons/delete', [CouponController, 'delete'])
+  //   .as('admin.coupons.delete')
 
-  router
-    .put('/product/update', [ProductController, 'updateProduct'])
+  // router
+  //   .get('/coupons/search', [CouponController, 'searchCoupon'])
+  //   .as('admin.coupons.search')
 
-  router
-    .delete('/products/delete', [ProductController, 'deleteProduct'])
-    .as('admin.products.delete')
 
+  // CATEGORIES (sample route)
   router
     .get('/categories', [CategoryController, 'index'])
     .as('admin.categories')

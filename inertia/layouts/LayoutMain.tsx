@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import HeaderComponent from '~/components/Header'
 
 type LayoutMainProps = {
+  isLoggedIn: boolean
+  user: any
   children: React.ReactNode
 }
 function LayoutMain({ children }: LayoutMainProps) {

@@ -6,6 +6,7 @@ export default class ProfileController {
   public async index({ inertia, auth }: HttpContext) {
     let isLoggedIn = false
     let user = null
+
     await auth.check()
     if (auth.isAuthenticated) {
       isLoggedIn = true
@@ -16,10 +17,12 @@ export default class ProfileController {
   }
   public async update({ request, response, auth, session }: HttpContext) {
     let user: any = null
+
     await auth.check()
     if (auth.isAuthenticated) {
       user = auth.user
     }
+
     const data = await request.validateUsing(updateUserValidator, {
       meta: {
         userId: user!.id,
@@ -44,23 +47,30 @@ export default class ProfileController {
       session.flash('success', {
         message: 'Profile updated successfully',
       })
+
       response.redirect().back()
+
     } catch (error) {
       console.error('Error updating user:', error)
     }
   }
+
   public async delete({ response, auth, session }: HttpContext) {
     let user: any = null
+
     await auth.check()
     if (auth.isAuthenticated) {
       user = auth.user
     }
+
     try {
       await user.delete()
       session.flash('success', {
         message: 'Deleted account successfully',
       })
+
       response.redirect().toRoute('/')
+
     } catch (error) {
       console.error('Error deleting user:', error)
     }

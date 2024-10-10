@@ -1,6 +1,7 @@
-import { usePage } from '@inertiajs/react'
-import { TabsComponent } from '~/components/Tabs'
+import { TabsMenu } from '~/components/Tabs'
 import LayoutMain from '~/layouts/LayoutMain'
+import UserProfile from '~/components/UserProfile'
+
 type User = {
   id: number
   email: string
@@ -14,11 +15,11 @@ type HomeProps = {
   user: User
 }
 
-
 function Profile({ isLoggedIn, user }: HomeProps) {
   return (
     <LayoutMain isLoggedIn={isLoggedIn} user={user}>
-      <TabsComponent />
+      <TabsMenu activeTab='profile' />
+      <UserProfile />
     </LayoutMain>
   )
 }
