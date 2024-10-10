@@ -17,6 +17,7 @@ import ProfileController from '#controllers/profile_controller'
 import DashboardController from '#controllers/admin/dashboard_controller'
 import UserController from '#controllers/admin/user_controller'
 import CategoryController from '#controllers/category_controller'
+import CouponController from '#controllers/coupon_controller'
 
 // router.on('/').renderInertia('home', { version: 6 })
 router.get('/', [HomeController, 'index'])
@@ -54,23 +55,24 @@ router.group(() => {
 
   router.put('/users/update-role', [UserController, 'updateRole'])
 
-  // router
-  //   .get('/coupons', [CouponController, 'index'])
-  //   .as('admin.coupons')
+  // COUPONS route
+  router
+    .get('/coupons', [CouponController, 'index'])
+    .as('admin.coupons')
 
-  // router
-  //   .post('/coupons/create', [CouponController, 'create'])
+  router
+    .post('/coupons/create', [CouponController, 'create'])
 
-  // router
-  //   .put('/coupons/update', [CouponController, 'update'])
+  router
+    .put('/coupons/update', [CouponController, 'update'])
 
-  // router
-  //   .delete('/coupons/delete', [CouponController, 'delete'])
-  //   .as('admin.coupons.delete')
+  router
+    .delete('/coupons/delete', [CouponController, 'delete'])
+    .as('admin.coupons.delete')
 
-  // router
-  //   .get('/coupons/search', [CouponController, 'searchCoupon'])
-  //   .as('admin.coupons.search')
+  router
+    .get('/coupons/search', [CouponController, 'searchCoupon'])
+    .as('admin.coupons.search')
 
 
   // CATEGORIES (sample route)
