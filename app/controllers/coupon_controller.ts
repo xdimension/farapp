@@ -1,5 +1,5 @@
 import Coupon from '#models/coupon'
-import { createCouponValidator, updateCouponValidator } from '#validators/coupon'
+// import { createCouponValidator, updateCouponValidator } from '#validators/coupon'
 import { HttpContext } from '@adonisjs/core/http'
 
 
@@ -44,16 +44,23 @@ export default class CouponController {
     const id = request.input('id')
     console.log('id:', id)
 
-    const { name, description } = await request.validateUsing(updateCouponValidator, {
-      meta: {
-        couponId: Number(id),
-      },
-    })
+    const data = request.only([
+      'code', 'name', 'description', 'availFrom', 'availTo',
+      'seller', 'minNumOfTickets', 'maxNumOfTickets', 'numOfWinners'
+    ])
+
     const coupon = await Coupon.findOrFail(id)
 
     try {
-      coupon.name = name
-      coupon.description = description || ''
+      coupon.name = data.name
+      coupon.description = data.description || ''
+      coupon.availFrom = data.availFrom,
+      coupon.availTo = data.availTo,
+      coupon.seller = data.seller,
+      coupon.minNumOfTickets = data.minNumOfTickets,
+      coupon.maxNumOfTickets = data.maxNumOfTickets,
+      coupon.numOfWinners = data.numOfWinners,
+
       await coupon.save()
 
       return response.redirect().back()
@@ -82,7 +89,7 @@ export default class CouponController {
     const page = request.input('page', 1)
     const limit = 10
     const coupons = await Coupon.query()
-      .where('name', 'like', `%${search}%`)
+      .where('code', 'like', `%${search}%`)
       .paginate(page, limit)
 
     return inertia.render('admin/coupons/list', { coupons, search })

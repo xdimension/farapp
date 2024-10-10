@@ -1,4 +1,3 @@
-
 import Coupons from '~/components/admin/Coupons'
 import ModalCreateCoupon from '~/components/admin/ModalCreateCoupon'
 import useModal from '~/hooks/useModal'
