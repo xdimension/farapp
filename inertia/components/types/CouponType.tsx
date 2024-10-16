@@ -9,7 +9,7 @@ type Coupon = {
   minNumOfTickets: number
   maxNumOfTickets: number
   numOfWinners: number
-  fileHash?: string
+  imageCid: string
 }
 
 export default Coupon;

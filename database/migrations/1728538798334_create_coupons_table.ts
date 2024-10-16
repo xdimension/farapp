@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.tinyint('min_num_of_tickets').unsigned().notNullable() // Min number of tickets
       table.tinyint('max_num_of_tickets').unsigned().notNullable() // Max number of tickets
       table.tinyint('num_of_winners').unsigned().notNullable()     // Number of winners
+      table.string('image_cid').nullable()   // Promo image CID (from Pinata)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
