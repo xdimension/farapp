@@ -13,7 +13,7 @@ function SearchComponent({ query, setQuery, handleSearch }: Props) {
           value={query}
           name="search"
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search categories..."
+          placeholder="Search..."
         />
         <button className="bg-blue-300 p-2 rounded-md ml-2 text-white" type="submit">
           Search

@@ -3,18 +3,10 @@ import _ from 'lodash'
 import { useState } from 'react'
 import useModal from '~/hooks/useModal'
 import ModalUpdateCoupon from './ModalUpdateCoupon'
+import ModalUploadImage from './ModalUploadImage'
+import Coupon from '../types/CouponType'
 import PaginationComponent from '../Pagination'
-import SearchCoupon from './SearchComponent'
 
-
-type Coupon = {
-  id: number
-  code: string
-  name: string
-  description: string
-  createdAt: string
-  updatedAt: string
-}
 
 type MetaData = {
   total: number
@@ -30,20 +22,21 @@ type MetaData = {
 
 function Coupons() {
   const modalUpdateCoupon = useModal()
+  const modalUploadImage = useModal()
+
   const [coupon, setCoupon] = useState<Coupon>()
-  const { coupons, search } = usePage<{
+  const { coupons } = usePage<{
     coupons: { data: Coupon[]; meta: MetaData }
-    search: any
   }>().props
-  console.log('coupons:', coupons);
 
-  const [query, setQuery] = useState(search)
-  console.log('search:', search);
+  const wordSeparator = /[ ,.!?;:]+/;
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    router.get('/admin/coupons/search', { search: query, page: 1 }, { preserveState: true })
+  const wrapLongText = (text: string, maxChars: number) => {
+    const regex = new RegExp(`(.{1,${maxChars}})(\\s|$)`, 'g');
+    return text?.split(regex) || [''];
   }
+
+
   return (
     <>
       {_.isEmpty(coupons?.data) ? (
@@ -61,7 +54,11 @@ function Coupons() {
                 </th>
 
                 <th scope="col" className="px-4 py-3">
-                  Coupon Name
+                  Name
+                </th>
+
+                <th scope="col" className="px-4 py-3">
+                  Description
                 </th>
 
                 <th scope="col" className="px-4 py-3">
@@ -88,6 +85,15 @@ function Coupons() {
                     >
                       {item.name}
                     </th>
+                    <th
+                      scope="row"
+                      className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {
+                        wrapLongText(_.truncate(item.description, { length: 115, separator: wordSeparator }), 60)
+                        .map(line => <p>{line}</p>)
+                      }
+                    </th>
                     <td className="px-4 py-4">
                       <button
                         onClick={() => {
@@ -96,36 +102,38 @@ function Coupons() {
                         }}
                         className={`font-medium text-blue-600 dark:text-blue-500 hover:underline`}
                       >
-                        Edit
+                        Edit/Deploy
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          modalUploadImage.openModal()
+                          setCoupon(item)
+                        }}
+                        className={`font-medium text-blue-600 dark:text-blue-500 hover:underline`}
+                      >
+                        Upload Promo Image
                       </button>
                     </td>
                   </tr>
-                )
+              )
               })}
             </tbody>
           </table>
-          {_.isEmpty(query) ? (
-            <PaginationComponent
-              url="/admin/coupons"
-              currentPage={coupons?.meta?.currentPage}
-              previousPageUrl={coupons?.meta?.previousPageUrl}
-              nextPageUrl={coupons?.meta?.nextPageUrl}
-              lastPage={coupons?.meta?.lastPage}
-            />
-          ) : (
             <PaginationComponent
               url={`/admin/coupons/search`}
               currentPage={coupons?.meta?.currentPage}
               previousPageUrl={coupons?.meta?.previousPageUrl}
               nextPageUrl={coupons?.meta?.nextPageUrl}
               lastPage={coupons?.meta?.lastPage}
-              query={query}
             />
-          )}
         </div>
       )}
       {modalUpdateCoupon.isOpen && (
         <ModalUpdateCoupon coupon={coupon} close={modalUpdateCoupon.closeModal} />
+      )}
+      {modalUploadImage.isOpen && (
+        <ModalUploadImage coupon={coupon} close={modalUploadImage.closeModal} />
       )}
     </>
   )

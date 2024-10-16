@@ -6,7 +6,7 @@ export const createCouponValidator = vine.compile(
       .string()
       .trim()
       .unique(async (db, value) => {
-        const coupon = await db.from('categories').where('name', value).first()
+        const coupon = await db.from('coupons').where('code', value).first()
         return !coupon
       }),
     description: vine.string().trim().optional(),
@@ -20,9 +20,9 @@ export const updateCouponValidator = vine.compile(
       .trim()
       .unique(async (db, value, field) => {
         const coupon = await db
-          .from('categories')
+          .from('coupons')
           .whereNot('id', field.meta.couponId)
-          .where('name', value)
+          .where('code', value)
           .first()
         return !coupon
       }),

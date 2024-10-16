@@ -45,6 +45,7 @@ router.group(() => {
 // ADMIN routers
 
 router.group(() => {
+
   router
     .get('/', [DashboardController, 'index'])
     .as('admin')
@@ -73,6 +74,10 @@ router.group(() => {
   router
     .get('/coupons/search', [CouponController, 'searchCoupon'])
     .as('admin.coupons.search')
+
+  router
+    .post('/api/coupons/uploadimage', [CouponController, 'uploadImage'])
+    .as('admin.coupons.uploadimage')
 
 
   // CATEGORIES (sample route)

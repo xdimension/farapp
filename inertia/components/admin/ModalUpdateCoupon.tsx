@@ -3,6 +3,9 @@ import { LoadingButtonComponent } from '../LoadingButton'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import Coupon from '../types/CouponType'
+import { type BaseError, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { abi } from '../../contract/abi'
+import { contractAddr } from '../../web3config'
 
 
 type Props = {
@@ -36,6 +39,42 @@ function ModalUpdateCoupon({ close, coupon }: Props) {
       close()
     }
   }, [recentlySuccessful])
+
+  const { data: hash, writeContract, error } = useWriteContract()
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    })
+
+  const deployCoupon = (e: React.FormEvent) => {
+
+    e.preventDefault()
+
+    if (!coupon) return;
+
+    const availFromTimestamp = BigInt(Math.floor(new Date(coupon.availFrom).getTime() / 1000));
+    const availToTimestamp = BigInt(Math.floor(new Date(coupon.availTo).getTime() / 1000));
+
+    if (confirm('Sure to deploy this coupon? '
+          + coupon.id + ' ' + coupon.seller + ' ' + coupon.name)) {
+
+      writeContract({
+        address: contractAddr,
+        abi,
+        functionName: 'createCoupon',
+        args: [
+                coupon.id,
+                coupon.seller,
+                coupon.minNumOfTickets,
+                coupon.maxNumOfTickets,
+                coupon.numOfWinners,
+                availFromTimestamp,
+                availToTimestamp,
+              ],
+      })
+    }
+  }
 
   return (
     <div className="bg-modal-bg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
@@ -210,14 +249,31 @@ function ModalUpdateCoupon({ close, coupon }: Props) {
                 {errors.numOfWinners && <p className="text-red-500 text-sm mt-1">{errors.numOfWinners}</p>}
               </div>
             </div>
-            <div className="flex justify-end">
+
+            <div className="flex justify-end *:ml-2">
               <LoadingButtonComponent
                 type="submit"
                 text="Update"
                 loading={processing}
                 disabled={processing}
               />
+
+              <LoadingButtonComponent
+                type="button"
+                text="Deploy On-Chain"
+                styles="bg-red-600"
+                loading={isConfirming}
+                disabled={isConfirming || isConfirmed}
+                onClick={deployCoupon}
+              />
             </div>
+            {error && (
+                <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+            )}
+
+            {isConfirmed && (
+              <div className='text-sm mt-4'>Transaction Confirmed at: {hash}</div>
+            )}
           </form>
         </div>
       </div>

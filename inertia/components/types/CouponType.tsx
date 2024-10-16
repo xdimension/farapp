@@ -5,10 +5,11 @@ type Coupon = {
   description: string
   availFrom: string
   availTo: string
-  seller: string
+  seller: `0x${string}`
   minNumOfTickets: number
   maxNumOfTickets: number
   numOfWinners: number
+  fileHash?: string
 }
 
 export default Coupon;

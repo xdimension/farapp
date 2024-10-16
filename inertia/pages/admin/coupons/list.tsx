@@ -6,9 +6,9 @@ import LayoutAdmin from '~/layouts/LayoutAdmin'
 function List() {
   const modelCreateCoupon = useModal()
 
-
   return (
     <LayoutAdmin>
+
       <div className="text-end">
         <button
           onClick={modelCreateCoupon.openModal}
@@ -19,6 +19,7 @@ function List() {
       </div>
       {modelCreateCoupon.isOpen && <ModalCreateCoupon close={modelCreateCoupon.closeModal} />}
       <Coupons />
+
     </LayoutAdmin>
   )
 }

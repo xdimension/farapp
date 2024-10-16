@@ -9,6 +9,9 @@ tmp
 .env.production.local
 .env.development.local
 
+# contract's abi
+inertia/contract/abi.ts
+
 # Frontend assets compiled code
 public/assets
 storage/uploads

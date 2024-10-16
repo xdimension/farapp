@@ -1,6 +1,8 @@
 import Coupon from '#models/coupon'
 // import { createCouponValidator, updateCouponValidator } from '#validators/coupon'
 import { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+import { PinataSDK } from "pinata"
 
 
 export default class CouponController {
@@ -42,7 +44,6 @@ export default class CouponController {
 
   public async update({ request, response }: HttpContext) {
     const id = request.input('id')
-    console.log('id:', id)
 
     const data = request.only([
       'code', 'name', 'description', 'availFrom', 'availTo',
@@ -82,6 +83,27 @@ export default class CouponController {
     } catch (error) {
       console.error('Error deleting coupon:', error)
     }
+  }
+
+  public async uploadImage({ request, response }: HttpContext) {
+    const id = request.input('id')
+    const imageFile = request.file('promoImage')
+    const coupon = await Coupon.findOrFail(id)
+
+export const pinata = new PinataSDK({
+  pinataJwt: `${process.env.PINATA_JWT}`,
+  pinataGateway: `${process.env.NEXT_PUBLIC_GATEWAY_URL}`
+})
+    const fileName = `${id}-${imageFile.clientName}`
+    await imageFile.move(app.tmpPath('uploads'), {
+      name: fileName,
+      overwrite: true,
+    })
+
+    coupon.promoImage = fileName
+    coupon.save()
+
+    return response.redirect().back()
   }
 
   public searchCoupon = async ({ request, inertia }: HttpContext) => {
