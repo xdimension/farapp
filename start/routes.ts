@@ -39,8 +39,13 @@ router.group(() => {
   router.delete('/delete-profile', [ProfileController, 'delete'])
 
 })
+.prefix('user')
 .use(middleware.auth())
 
+router.group(() => {
+  router.get('promo-img/:cid', [CouponController, 'promoImageUrl'])
+})
+.use(middleware.auth())
 
 // ADMIN routers
 

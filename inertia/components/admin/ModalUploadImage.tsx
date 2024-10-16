@@ -11,8 +11,6 @@ type Props = {
 
 function ModalUploadImage({ close, coupon }: Props) {
 
-  const { fileHash } = usePage().props as unknown as { fileHash: string }
-
   const { processing, errors, data, setData, recentlySuccessful, post } = useForm({
     id: coupon!.id,
     promoImage: null as File | null,
@@ -73,12 +71,6 @@ function ModalUploadImage({ close, coupon }: Props) {
               <div className='col-span-2'>
                 <input type="file" onChange={e => setData('promoImage', e.target.files[0])} />
               </div>
-
-              {fileHash &&
-              <div className='col-span-2'>
-                {fileHash}
-              </div>
-              }
             </div>
 
             <div className="flex justify-end">

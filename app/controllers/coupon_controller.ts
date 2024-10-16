@@ -2,10 +2,18 @@ import Coupon from '#models/coupon'
 // import { createCouponValidator, updateCouponValidator } from '#validators/coupon'
 import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import { PinataSDK } from "pinata"
+import { PinataSDK } from "pinata-web3"
+import path from 'path';
+import fs from 'fs';
 
 
 export default class CouponController {
+  private pinata = new PinataSDK({
+    pinataJwt: `${process.env.PINATA_JWT}`,
+    pinataGateway: `${process.env.PINATA_GATEWAY_URL}`,
+    pinataGatewayKey: `${process.env.PINATA_GATEWAY_KEY}`,
+  });
+
   public async index({ inertia, auth, request }: HttpContext) {
     // const coupons = await Coupon.all()
     const page = request.input('page', 1)
@@ -87,23 +95,41 @@ export default class CouponController {
 
   public async uploadImage({ request, response }: HttpContext) {
     const id = request.input('id')
-    const imageFile = request.file('promoImage')
+    const promoImage = request.file('promoImage')
+
     const coupon = await Coupon.findOrFail(id)
 
-export const pinata = new PinataSDK({
-  pinataJwt: `${process.env.PINATA_JWT}`,
-  pinataGateway: `${process.env.NEXT_PUBLIC_GATEWAY_URL}`
-})
-    const fileName = `${id}-${imageFile.clientName}`
-    await imageFile.move(app.tmpPath('uploads'), {
-      name: fileName,
-      overwrite: true,
-    })
+    const fileName = `${id}-${promoImage.clientName}`
+    await promoImage.move(app.tmpPath('uploads'), {name: fileName})
 
-    coupon.promoImage = fileName
-    coupon.save()
+    try {
+      const fileBuffer = fs.readFileSync(path.join(app.tmpPath('uploads'), fileName));
+		  const blob = new Blob([fileBuffer], { type: promoImage.type });
+      const imageFile = new File([blob], fileName, {
+        type: promoImage.type,
+        lastModified: new Date().getTime(),
+      });
+
+      const { IpfsHash: cid } = await this.pinata.upload.file(imageFile)
+
+      coupon.imageCid = cid
+      await coupon.save()
+    }
+    catch(e) {
+      console.log(e);
+    }
 
     return response.redirect().back()
+  }
+
+  public async promoImageUrl({ params, request, response} : HttpContext) {
+      const {cid} = params
+
+      const imageUrl = `${process.env.PINATA_GATEWAY_URL}/ipfs/${cid}?pinataGatewayToken=${process.env.PINATA_GATEWAY_KEY}`
+      // const imageFile = await this.pinata.gateways.get(cid)
+      // console.log(imageFile)
+
+      return response.json({imageUrl})
   }
 
   public searchCoupon = async ({ request, inertia }: HttpContext) => {
