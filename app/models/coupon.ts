@@ -35,6 +35,9 @@ export default class Coupon extends BaseModel {
   @column()
   declare imageCid: string
 
+  @column()
+  declare createdBy: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
