@@ -3,7 +3,13 @@ import { base, baseSepolia } from 'wagmi/chains'
 import { getDefaultConfig } from "connectkit";
 
 
-export const contractAddr = '0xd425f95801397b0D4A5D535E88a8d6F4935eC1eB'
+export const envConfig = {
+  contractAddr: '0x6D3cdF3112267f255d568A6683a9Fc9Daea69024',
+
+  // Pinata
+  pinataGatewayURL: 'bronze-clumsy-dingo-246.mypinata.cloud',
+  pinataGatewayKey: '0e8zw_IVSuebJU9eZHO6ODYFIBj6u5wrYR0bzSIPSaiDv_yo490GP59WR7QVaScs'
+}
 
 export const config = createConfig(
   getDefaultConfig({
@@ -20,7 +26,7 @@ export const config = createConfig(
 
     // Optional App Info
     appDescription: "Farcaster Group Buy",
-    appUrl: "https://farbuy.xyz", // your app's url
-    appIcon: "https://farbuy.xyz/logo.png",
+    appUrl: "https://couponcast.xyz",
+    appIcon: "https://couponcast.xyz/logo.png",
   })
 )
