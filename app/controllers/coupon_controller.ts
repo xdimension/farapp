@@ -50,15 +50,18 @@ export default class CouponController {
     }
   }
 
-  public async update({ request, response }: HttpContext) {
+  public async update({ request, response, auth }: HttpContext) {
     const id = request.input('id')
+    const coupon = await Coupon.findOrFail(id)
+
+    if (coupon.created_by != auth.user?.id) {
+      return response.unauthorized({ error: 'You are not authorized to perform this action.' })
+    }
 
     const data = request.only([
       'code', 'name', 'description', 'availFrom', 'availTo',
       'seller', 'minNumOfTickets', 'maxNumOfTickets', 'numOfWinners'
     ])
-
-    const coupon = await Coupon.findOrFail(id)
 
     try {
       coupon.name = data.name
@@ -79,9 +82,13 @@ export default class CouponController {
     }
   }
 
-  public async delete({ request, response }: HttpContext) {
+  public async delete({ request, response, auth }: HttpContext) {
     const id = request.input('id')
     const coupon = await Coupon.findOrFail(id)
+
+    if (coupon.created_by != auth.user?.id) {
+      return response.unauthorized({ error: 'You are not authorized to perform this action.' })
+    }
 
     try {
       await coupon.delete()
@@ -93,11 +100,15 @@ export default class CouponController {
     }
   }
 
-  public async uploadImage({ request, response }: HttpContext) {
+  public async uploadImage({ request, response, auth }: HttpContext) {
     const id = request.input('id')
-    const promoImage = request.file('promoImage')
-
     const coupon = await Coupon.findOrFail(id)
+
+    if (coupon.created_by != auth.user?.id) {
+      return response.unauthorized({ error: 'You are not authorized to perform this action.' })
+    }
+
+    const promoImage = request.file('promoImage')
 
     const fileName = `${id}-${promoImage.clientName}`
     await promoImage.move(app.tmpPath('uploads'), {name: fileName})
@@ -123,7 +134,7 @@ export default class CouponController {
   }
 
   public async promoImageUrl({ params, request, response} : HttpContext) {
-      const {cid} = params
+      const {cid} = params  // cid = image's cid from pinata
 
       const imageUrl = `${process.env.PINATA_GATEWAY_URL}/ipfs/${cid}?pinataGatewayToken=${process.env.PINATA_GATEWAY_KEY}`
       // const imageFile = await this.pinata.gateways.get(cid)

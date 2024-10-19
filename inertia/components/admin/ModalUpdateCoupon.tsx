@@ -4,8 +4,8 @@ import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import Coupon from '../types/CouponType'
 import { type BaseError, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { abi } from '../../contract/abi'
-import { contractAddr } from '../../web3config'
+import { abi } from '~/contract/abi'
+import { envConfig } from '~/web3config'
 
 
 type Props = {
@@ -27,6 +27,8 @@ function ModalUpdateCoupon({ close, coupon }: Props) {
     maxNumOfTickets: coupon?.maxNumOfTickets || 0,
     numOfWinners: coupon?.numOfWinners || 0,
   })
+
+  const { contractAddr } = envConfig;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +58,7 @@ function ModalUpdateCoupon({ close, coupon }: Props) {
     const availFromTimestamp = BigInt(Math.floor(new Date(coupon.availFrom).getTime() / 1000));
     const availToTimestamp = BigInt(Math.floor(new Date(coupon.availTo).getTime() / 1000));
 
-    if (confirm('Sure to deploy this coupon? '
+    if (confirm('Sure to save this coupon on-chain? '
           + coupon.id + ' ' + coupon.seller + ' ' + coupon.name)) {
 
       writeContract({
@@ -260,7 +262,7 @@ function ModalUpdateCoupon({ close, coupon }: Props) {
 
               <LoadingButtonComponent
                 type="button"
-                text="Deploy On-Chain"
+                text="Save On-Chain"
                 styles="bg-red-600"
                 loading={isConfirming}
                 disabled={isConfirming || isConfirmed}

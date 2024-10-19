@@ -1,20 +1,25 @@
 import { useForm, usePage } from '@inertiajs/react'
 import { LoadingButtonComponent } from '../LoadingButton'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Coupon from '../types/CouponType';
+import { envConfig } from '~/web3config';
 
 type Props = {
-  close: () => void
   coupon?: Coupon
+  close: () => void
 }
 
-function ModalUploadImage({ close, coupon }: Props) {
+function ModalUploadImage({ coupon, close }: Props) {
 
   const { processing, errors, data, setData, recentlySuccessful, post } = useForm({
     id: coupon!.id,
     promoImage: null as File | null,
   })
+
+  const { pinataGatewayURL, pinataGatewayKey } = envConfig;
+
+  const [imageUrl, setImageUrl] = useState<string>('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,9 +29,14 @@ function ModalUploadImage({ close, coupon }: Props) {
   useEffect(() => {
     if (recentlySuccessful) {
       toast.success('Image uploaded successfully')
-      // close()
+      close()
     }
   }, [recentlySuccessful])
+
+  useEffect(() => {
+    const imageUrl = `https://${pinataGatewayURL}/ipfs/${coupon!.imageCid}?pinataGatewayToken=${pinataGatewayKey}`
+    setImageUrl(imageUrl)
+  }, [coupon!.imageCid])
 
   return (
     <div className="bg-modal-bg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
@@ -68,8 +78,13 @@ function ModalUploadImage({ close, coupon }: Props) {
             <input type="hidden" name="id" value={coupon!.id} />
 
             <div className="grid gap-4 mb-4 grid-cols-2">
+              {coupon?.imageCid &&
               <div className='col-span-2'>
-                <input type="file" onChange={e => setData('promoImage', e.target.files[0])} />
+                <img src={imageUrl} />
+              </div>}
+
+              <div className='col-span-2'>
+                <input type="file" onChange={e => setData('promoImage', e.target.files![0])} />
               </div>
             </div>
 

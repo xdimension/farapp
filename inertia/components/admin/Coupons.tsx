@@ -36,7 +36,6 @@ function Coupons() {
     return text?.split(regex) || [''];
   }
 
-
   return (
     <>
       {_.isEmpty(coupons?.data) ? (

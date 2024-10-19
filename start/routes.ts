@@ -18,6 +18,7 @@ import DashboardController from '#controllers/admin/dashboard_controller'
 import UserController from '#controllers/admin/user_controller'
 import CategoryController from '#controllers/category_controller'
 import CouponController from '#controllers/coupon_controller'
+import PublicCouponController from '#controllers/api/public_coupon_controller'
 
 // router.on('/').renderInertia('home', { version: 6 })
 router.get('/', [HomeController, 'index'])
@@ -30,6 +31,12 @@ router.post('/login', [LoginController, 'store'])
 
 router.get('/logout', [LogoutController, 'handle'])
 
+// GUEST routes
+router.group(() => {
+  router.get('/coupons/:id', [PublicCouponController, 'get'])
+})
+.prefix('api')
+
 
 // USER DASHBOARD routers
 
@@ -37,7 +44,6 @@ router.group(() => {
   router.get('/profile', [ProfileController, 'index'])
   router.put('/update-profile', [ProfileController, 'update'])
   router.delete('/delete-profile', [ProfileController, 'delete'])
-
 })
 .prefix('user')
 .use(middleware.auth())
@@ -47,7 +53,7 @@ router.group(() => {
 })
 .use(middleware.auth())
 
-// ADMIN routers
+// ADMIN routes
 
 router.group(() => {
 
@@ -61,7 +67,7 @@ router.group(() => {
 
   router.put('/users/update-role', [UserController, 'updateRole'])
 
-  // COUPONS route
+  // COUPONS routes
   router
     .get('/coupons', [CouponController, 'index'])
     .as('admin.coupons')
