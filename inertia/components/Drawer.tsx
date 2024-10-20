@@ -15,6 +15,9 @@ import {
   HiTable,
   HiUser,
   HiViewBoards,
+  HiSpeakerphone,
+  HiTag,
+  HiShoppingCart
 } from 'react-icons/hi'
 import { IoIosMenu } from 'react-icons/io'
 export function DrawerComponent() {
@@ -56,11 +59,17 @@ export function DrawerComponent() {
                       <Sidebar.Item href="/admin" icon={HiChartPie}>
                         Dashboard
                       </Sidebar.Item>
-                      <Sidebar.Item href="/admin/coupons" icon={HiShoppingBag}>
-                        Coupons
-                      </Sidebar.Item>
                       <Sidebar.Item href="/admin/users" icon={HiUsers}>
                         Users list
+                      </Sidebar.Item>
+                      <Sidebar.Item href="/admin/coupons" icon={HiTag}>
+                        Coupons
+                      </Sidebar.Item>
+                      <Sidebar.Item href="/influencer/coupons" icon={HiSpeakerphone}>
+                        Influencers
+                      </Sidebar.Item>
+                      <Sidebar.Item href="/buyer/coupons" icon={HiShoppingBag}>
+                        Buyers
                       </Sidebar.Item>
                       <Sidebar.Item href="/logout" icon={HiLogin}>
                         Logout
@@ -83,15 +92,17 @@ export function DrawerComponent() {
                 <Sidebar.Item href="/admin" icon={HiChartPie}>
                   Dashboard
                 </Sidebar.Item>
-
                 <Sidebar.Item href="/admin/users" icon={HiUser}>
                   Users List
                 </Sidebar.Item>
-                <Sidebar.Item href="/admin/categories" icon={HiShoppingBag}>
-                  Categories
-                </Sidebar.Item>
-                <Sidebar.Item href="/admin/coupons" icon={HiShoppingBag}>
+                <Sidebar.Item href="/admin/coupons" icon={HiTag}>
                   Coupons
+                </Sidebar.Item>
+                <Sidebar.Item href="/influencer/coupons" icon={HiSpeakerphone}>
+                  Influencers
+                </Sidebar.Item>
+                <Sidebar.Item href="/buyer/coupons" icon={HiShoppingBag}>
+                  Buyers
                 </Sidebar.Item>
                 <Sidebar.Item href="/logout" icon={HiArrowSmRight}>
                   Logout

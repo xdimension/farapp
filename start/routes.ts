@@ -16,8 +16,9 @@ import LogoutController from '#controllers/auth/logout_controller'
 import ProfileController from '#controllers/profile_controller'
 import DashboardController from '#controllers/admin/dashboard_controller'
 import UserController from '#controllers/admin/user_controller'
-import CategoryController from '#controllers/category_controller'
 import CouponController from '#controllers/coupon_controller'
+import InfluencerController from '#controllers/influencer_controller'
+import BuyerController from '#controllers/buyer_controller'
 import PublicCouponController from '#controllers/api/public_coupon_controller'
 
 // router.on('/').renderInertia('home', { version: 6 })
@@ -67,7 +68,7 @@ router.group(() => {
 
   router.put('/users/update-role', [UserController, 'updateRole'])
 
-  // COUPONS routes
+  // ADMIN COUPONS routes
   router
     .get('/coupons', [CouponController, 'index'])
     .as('admin.coupons')
@@ -90,27 +91,34 @@ router.group(() => {
     .post('/api/coupons/uploadimage', [CouponController, 'uploadImage'])
     .as('admin.coupons.uploadimage')
 
-
-  // CATEGORIES (sample route)
-  router
-    .get('/categories', [CategoryController, 'index'])
-    .as('admin.categories')
-
-  router
-    .post('/categories/create', [CategoryController, 'create'])
-
-  router
-    .put('/categories/update', [CategoryController, 'update'])
-
-  router
-    .delete('/categories/delete', [CategoryController, 'delete'])
-    .as('admin.categories.delete')
-
-  router
-    .get('/categories/search', [CategoryController, 'searchCategory'])
-    .as('admin.categories.search')
-
 })
 .use(middleware.admin())
 .prefix('/admin')
 
+// INFLUENCER routes
+
+router.group(() => {
+  router
+    .get('/coupons', [InfluencerController, 'index'])
+    .as('influencer.coupons')
+
+  router
+    .get('/coupons/search', [InfluencerController, 'searchCoupon'])
+    .as('influencer.coupons.search')
+})
+.use(middleware.admin())
+.prefix('/influencer')
+
+// BUYER routes
+
+router.group(() => {
+  router
+    .get('/coupons', [BuyerController, 'index'])
+    .as('buyer.coupons')
+
+  router
+    .get('/coupons/search', [BuyerController, 'searchCoupon'])
+    .as('buyer.coupons.search')
+  })
+.use(middleware.admin())
+.prefix('/buyer')
