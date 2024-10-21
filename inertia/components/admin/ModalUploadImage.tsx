@@ -34,9 +34,11 @@ function ModalUploadImage({ coupon, close }: Props) {
   }, [recentlySuccessful])
 
   useEffect(() => {
-    const imageUrl = `https://${pinataGatewayURL}/ipfs/${coupon!.imageCid}?pinataGatewayToken=${pinataGatewayKey}`
-    setImageUrl(imageUrl)
-  }, [coupon!.imageCid])
+    if (coupon?.imageCid) {
+      const imageUrl = `https://${pinataGatewayURL}/ipfs/${coupon?.imageCid}?pinataGatewayToken=${pinataGatewayKey}`
+      setImageUrl(imageUrl)
+    }
+  }, [coupon?.imageCid])
 
   return (
     <div className="bg-modal-bg overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%)] max-h-full">
@@ -78,7 +80,7 @@ function ModalUploadImage({ coupon, close }: Props) {
             <input type="hidden" name="id" value={coupon!.id} />
 
             <div className="grid gap-4 mb-4 grid-cols-2">
-              {coupon?.imageCid &&
+              {imageUrl &&
               <div className='col-span-2'>
                 <img src={imageUrl} />
               </div>}
@@ -93,7 +95,7 @@ function ModalUploadImage({ coupon, close }: Props) {
                 type="submit"
                 text="Upload"
                 loading={processing}
-                disabled={processing}
+                disabled={processing || !data.promoImage}
               />
             </div>
           </form>
