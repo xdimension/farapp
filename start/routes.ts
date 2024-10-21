@@ -113,7 +113,7 @@ router.group(() => {
 
 router.group(() => {
   router
-    .get('/coupons', [BuyerController, 'index'])
+    .get('/coupons/:userAddr', [BuyerController, 'index'])
     .as('buyer.coupons')
 
   router
