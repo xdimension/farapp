@@ -23,7 +23,7 @@ export default class CouponController {
     return inertia.render('admin/coupons/list', { user: auth.user, coupons })
   }
 
-  public async create({ request, response }: HttpContext) {
+  public async create({ request, response, auth }: HttpContext) {
     // const data = await request.validateUsing(createCouponValidator)
     const data = request.only([
       'code', 'name', 'description', 'availFrom', 'availTo',
@@ -41,6 +41,7 @@ export default class CouponController {
         minNumOfTickets: data.minNumOfTickets,
         maxNumOfTickets: data.maxNumOfTickets,
         numOfWinners: data.numOfWinners,
+        createdBy: auth.user.id
       })
 
       return response.redirect().back()
@@ -54,7 +55,7 @@ export default class CouponController {
     const id = request.input('id')
     const coupon = await Coupon.findOrFail(id)
 
-    if (coupon.created_by != auth.user?.id) {
+    if (coupon.createdBy != auth.user?.id) {
       return response.unauthorized({ error: 'You are not authorized to perform this action.' })
     }
 
@@ -86,7 +87,7 @@ export default class CouponController {
     const id = request.input('id')
     const coupon = await Coupon.findOrFail(id)
 
-    if (coupon.created_by != auth.user?.id) {
+    if (coupon.createdBy != auth.user?.id) {
       return response.unauthorized({ error: 'You are not authorized to perform this action.' })
     }
 
@@ -104,11 +105,14 @@ export default class CouponController {
     const id = request.input('id')
     const coupon = await Coupon.findOrFail(id)
 
-    if (coupon.created_by != auth.user?.id) {
+    if (coupon.createdBy != auth.user?.id) {
       return response.unauthorized({ error: 'You are not authorized to perform this action.' })
     }
 
     const promoImage = request.file('promoImage')
+    if (!promoImage) {
+      return response.badRequest({ error: 'No image file provided.' })
+    }
 
     const fileName = `${id}-${promoImage.clientName}`
     await promoImage.move(app.tmpPath('uploads'), {name: fileName})
