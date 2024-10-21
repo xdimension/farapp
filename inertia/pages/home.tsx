@@ -8,6 +8,7 @@ function Home() {
     <>
       <Head title="Home" />
       <LayoutMain>
+        {false &&
         <div className=" p-10 gap-4 md:flex">
           <SliderComponent />
           <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 md:w-[40%] w-full md:mt-0 mt-[5px] ">
@@ -28,7 +29,7 @@ function Home() {
               objectFit="cover"
             />
           </div>
-        </div>
+        </div>}
       </LayoutMain>
     </>
   )
