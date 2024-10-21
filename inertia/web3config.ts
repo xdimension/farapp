@@ -4,6 +4,8 @@ import { getDefaultConfig } from "connectkit";
 
 
 export const envConfig = {
+  appUrl: "https://850b-2400-9800-702-c8ef-d58-95af-b552-ddb0.ngrok-free.app",
+
   contractAddr: '0x6D3cdF3112267f255d568A6683a9Fc9Daea69024',
 
   // Pinata
@@ -23,10 +25,5 @@ export const config = createConfig(
 
     // Required App Info
     appName: "Farcaster Group Buy",
-
-    // Optional App Info
-    appDescription: "Farcaster Group Buy",
-    appUrl: "https://couponcast.xyz",
-    appIcon: "https://couponcast.xyz/logo.png",
   })
 )
