@@ -20,10 +20,22 @@ import {
   HiShoppingCart
 } from 'react-icons/hi'
 import { IoIosMenu } from 'react-icons/io'
+import { useAccount } from 'wagmi'
+import { abi } from '~/contract/abi'
+
 export function DrawerComponent() {
+  const { address: userAddress } = useAccount()
+
   const [isOpen, setIsOpen] = useState(false)
 
   const handleClose = () => setIsOpen(false)
+
+  const handleMenuClick = () => {
+
+    if (!userAddress) {
+      alert('Please connect your wallet first')
+    }
+  }
 
   return (
     <div className="z-40 ">
@@ -101,7 +113,7 @@ export function DrawerComponent() {
                 <Sidebar.Item href="/influencer/coupons" icon={HiSpeakerphone}>
                   Influencers
                 </Sidebar.Item>
-                <Sidebar.Item href="/buyer/coupons" icon={HiShoppingBag}>
+                <Sidebar.Item href={userAddress? `/buyer/coupons/${userAddress}`: '/admin'} onClick={handleMenuClick} icon={HiShoppingBag}>
                   Buyers
                 </Sidebar.Item>
                 <Sidebar.Item href="/logout" icon={HiArrowSmRight}>
