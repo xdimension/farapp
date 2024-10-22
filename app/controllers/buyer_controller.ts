@@ -2,7 +2,7 @@ import Coupon from '#models/coupon'
 import { HttpContext } from '@adonisjs/core/http'
 import { createPublicClient, http } from 'viem'
 import { base, baseSepolia } from 'viem/chains'
-import { abi } from '../../contract/abi.ts'
+import { abi } from '../../contract/abi'
 import { config } from 'dotenv'
 config()
 
