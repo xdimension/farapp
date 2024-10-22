@@ -17,7 +17,7 @@ export default class extends BaseSchema {
       table.tinyint('num_of_winners').unsigned().notNullable()     // Number of winners
       table.string('image_cid').nullable()   // Promo image CID (from Pinata)
 
-      table.number('created_by')
+      table.integer('created_by').unsigned().notNullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
