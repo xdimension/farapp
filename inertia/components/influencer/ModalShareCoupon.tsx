@@ -22,7 +22,7 @@ function ModalCreateCoupon({ close, coupon }: Props) {
 
   const castCoupon = (e: React.FormEvent) => {
     e.preventDefault()
-    window.open(`https://warpcast.com/~/compose?text=I found a good deal!&embeds[]=${envConfig.appUrl}/cast/${coupon!.id}`, '_blank')
+    window.open(`https://warpcast.com/~/compose?text=I found a good deal!&embeds[]=${envConfig.castUrl}/cast/${coupon!.id}`, '_blank')
   }
 
   return (
