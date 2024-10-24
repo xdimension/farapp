@@ -72,19 +72,19 @@ function Coupons() {
                     key={index}
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
                   >
-                    <th
+                    <td
                       scope="row"
                       className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {item.code}
-                    </th>
-                    <th
+                    </td>
+                    <td
                       scope="row"
                       className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {item.name}
-                    </th>
-                    <th
+                    </td>
+                    <td
                       scope="row"
                       className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
@@ -92,14 +92,14 @@ function Coupons() {
                         wrapLongText(_.truncate(item.description, { length: 115, separator: wordSeparator }), 60)
                         .map(line => <p>{line}</p>)
                       }
-                    </th>
+                    </td>
                     <td className="px-4 py-4">
                       <button
                         onClick={() => {
                           modalUpdateCoupon.openModal()
                           setCoupon(item)
                         }}
-                        className={`font-medium text-blue-600 dark:text-blue-500 hover:underline`}
+                        className={`mr-3 font-medium text-blue-600 dark:text-blue-500 hover:underline`}
                       >
                         Edit/Deploy
                       </button>
@@ -109,7 +109,7 @@ function Coupons() {
                           modalUploadImage.openModal()
                           setCoupon(item)
                         }}
-                        className={`font-medium text-blue-600 dark:text-blue-500 hover:underline`}
+                        className={`mr-3 font-medium text-blue-600 dark:text-blue-500 hover:underline`}
                       >
                         Upload Promo Image
                       </button>
