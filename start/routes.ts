@@ -21,23 +21,30 @@ import InfluencerController from '#controllers/influencer_controller'
 import BuyerController from '#controllers/buyer_controller'
 import PublicCouponController from '#controllers/api/public_coupon_controller'
 
-// router.on('/').renderInertia('home', { version: 6 })
-router.get('/', [HomeController, 'index'])
 
+// GUEST routes
+
+// router.on('/').renderInertia('home', { version: 6 })
 router.get('/register', [RegisterController, 'show'])
-router.post('/register', [RegisterController, 'store'])
+// router.post('/register', [RegisterController, 'store'])
 
 router.get('/login', [LoginController, 'show'])
 router.post('/login', [LoginController, 'store'])
 
 router.get('/logout', [LogoutController, 'handle'])
 
-// GUEST routes
 router.group(() => {
   router.get('/coupons/:id', [PublicCouponController, 'get'])
-})
-.prefix('api')
+  })
+  .prefix('api')
 
+// AUTHENTICATED routes
+router.group(() => {
+  router.get('/', [HomeController, 'index'])
+
+  router.get('/promo-img/:cid', [CouponController, 'promoImageUrl'])
+})
+.use(middleware.auth())
 
 // USER DASHBOARD routers
 
@@ -49,10 +56,6 @@ router.group(() => {
 .prefix('user')
 .use(middleware.auth())
 
-router.group(() => {
-  router.get('promo-img/:cid', [CouponController, 'promoImageUrl'])
-})
-.use(middleware.auth())
 
 // ADMIN routes
 
