@@ -4,8 +4,8 @@ import { getDefaultConfig } from "connectkit";
 
 
 export const envConfig = {
-  appUrl: "https://app.couponcast.xyz",
-  castUrl: "https://fc.couponcast.xyz",
+  appUrl: "http://localhost:5173",
+  castUrl: "http://",
 
   contractAddr: '0x6D3cdF3112267f255d568A6683a9Fc9Daea69024',
 
