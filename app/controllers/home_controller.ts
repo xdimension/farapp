@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import Roles from '../enums/role.js'
 
 export default class HomeController {
   public async index({ inertia, response, auth }: HttpContext) {
@@ -11,12 +12,10 @@ export default class HomeController {
       user = auth.user
     }
 
-    if (isLoggedIn) {
+    if (isLoggedIn && user.roleId == Roles.ADMIN) {
       return response.redirect('/admin')
     }
 
-    return response.redirect('/login')
-
-    // return inertia.render('home', { isLoggedIn, user });
+    return inertia.render('home', { isLoggedIn, user });
   }
 }
