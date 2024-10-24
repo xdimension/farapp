@@ -25,20 +25,22 @@ function HeaderComponent() {
           MyApp
         </span>
       </NavbarBrand>
-      <div className="order-2 hidden items-center md:flex">
-        {isLoggedIn && user ? (
-          <>
-            <Link href='/profile' className="mr-3">{user.username}</Link> <LogoutComponent />
-          </>
-        ) : (
-          <Link href="/login">Login</Link>
-        )}
-      </div>
+
       <NavbarToggle />
       <NavbarCollapse>
         <Link href="/">Home</Link>
-        <Link href="/products">Products</Link>
-        <Link href="#">About</Link>
+
+        {isLoggedIn && user && (
+          <Link href="/admin">Admin Panel</Link>
+        )}
+        {isLoggedIn && user && (
+          <Link href='/admin' className="mr-3">{user.username}</Link>
+        )}
+        {isLoggedIn && user ? (
+          <LogoutComponent />
+        ) : (
+          <Link href="/login">Login</Link>
+        )}
       </NavbarCollapse>
     </MegaMenu>
   )
