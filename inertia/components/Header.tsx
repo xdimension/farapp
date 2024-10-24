@@ -11,12 +11,13 @@ type User ={
   id: number
   username: string
   email: string
-  role: string
+  roleId: number
   created_at: string
   updated_at: string
 }
 function HeaderComponent() {
   const { isLoggedIn, user } = usePage<{user:User,isLoggedIn:boolean}>().props
+
   return (
     <MegaMenu>
       <NavbarBrand href="/">
@@ -30,11 +31,11 @@ function HeaderComponent() {
       <NavbarCollapse>
         <Link href="/">Home</Link>
 
-        {isLoggedIn && user && (
+        {isLoggedIn && (user.roleId == 2) && (
           <Link href="/admin">Admin Panel</Link>
         )}
-        {isLoggedIn && user && (
-          <Link href='/admin' className="mr-3">{user.username}</Link>
+        {isLoggedIn && (
+          <Link href="/user/profile" className="mr-3">{user.username}</Link>
         )}
         {isLoggedIn && user ? (
           <LogoutComponent />
