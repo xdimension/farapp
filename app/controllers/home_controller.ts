@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HomeController {
-  public async index({ inertia, auth }: HttpContext) {
+  public async index({ inertia, response, auth }: HttpContext) {
     let isLoggedIn = false
     let user = null
 
@@ -11,6 +11,12 @@ export default class HomeController {
       user = auth.user
     }
 
-    return inertia.render('home', { isLoggedIn, user });
+    if (isLoggedIn) {
+      return response.redirect('/admin')
+    }
+
+    return response.redirect('/login')
+
+    // return inertia.render('home', { isLoggedIn, user });
   }
 }
