@@ -4,14 +4,14 @@ import { getDefaultConfig } from "connectkit";
 
 
 export const envConfig = {
-  appUrl: "https://app.couponcast.xyz",
-  castUrl: "https://fc.couponcast.xyz",
+  appUrl: import.meta.env.VITE_APP_BASE_URL,
+  castUrl: import.meta.env.VITE_CAST_BASE_URL,
 
-  contractAddr: '0x6D3cdF3112267f255d568A6683a9Fc9Daea69024',
+  contractAddr: import.meta.env.VITE_CONTRACT_ADDR,
 
   // Pinata
-  pinataGatewayURL: 'bronze-clumsy-dingo-246.mypinata.cloud',
-  pinataGatewayKey: '0e8zw_IVSuebJU9eZHO6ODYFIBj6u5wrYR0bzSIPSaiDv_yo490GP59WR7QVaScs'
+  pinataGatewayURL: import.meta.env.PINATA_GATEWAY_URL,
+  pinataGatewayKey: import.meta.env.PINATA_GATEWAY_KEY
 }
 
 export const config = createConfig(
@@ -22,9 +22,9 @@ export const config = createConfig(
       [base.id]: http(),
     },
 
-    walletConnectProjectId: '11aa4949cca946ac595d755c2101d3be',
+    walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
 
     // Required App Info
-    appName: "Farcaster Group Buy",
+    appName: import.meta.env.VITE_APP_NAME,
   })
 )
